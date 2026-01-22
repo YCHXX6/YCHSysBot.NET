@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace SysBot.Pokemon;
 
@@ -7,20 +7,20 @@ namespace SysBot.Pokemon;
 /// </summary>
 public abstract class BaseConfig
 {
-    protected const string FeatureToggle = nameof(FeatureToggle);
-    protected const string Operation = nameof(Operation);
-    private const string Debug = nameof(Debug);
+    protected const string FeatureToggle = "功能切换";
+    protected const string Operation = "操作";
+    private const string Debug = "调试";
 
-    [Category(FeatureToggle), Description("When enabled, the bot will press the B button occasionally when it is not processing anything (to avoid sleep).")]
+    [Category(FeatureToggle), DisplayName("防止待机 (Anti-Idle)"), Description("启用时，当机器人空闲时会偶尔按 B 按钮以防止进入睡眠。")]
     public bool AntiIdle { get; set; }
 
-    [Category(FeatureToggle), Description("Enables text logs. Restart to apply changes.")]
+    [Category(FeatureToggle), DisplayName("启用日志"), Description("启用文本日志。更改后需重启以生效。")]
     public bool LoggingEnabled { get; set; } = true;
 
-    [Category(FeatureToggle), Description("Maximum number of old text log files to retain. Set this to <= 0 to disable log cleanup. Restart to apply changes.")]
+    [Category(FeatureToggle), DisplayName("保留的日志归档数量"), Description("保留的旧文本日志文件的最大数量。设置为 <= 0 可禁用日志清理。更改后需重启以生效。")]
     public int MaxArchiveFiles { get; set; } = 14;
 
-    [Category(Debug), Description("Skips creating bots when the program is started; helpful for testing integrations.")]
+    [Category(Debug), DisplayName("跳过控制台机器人创建"), Description("启动程序时跳过创建机器人；便于测试集成。")]
     public bool SkipConsoleBotCreation { get; set; }
 
     [Category(Operation)]

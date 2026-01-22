@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ public class HelpModule(CommandService Service) : ModuleBase<SocketCommandContex
         var builder = new EmbedBuilder
         {
             Color = new Color(114, 137, 218),
-            Description = "These are the commands you can use:",
+            Description = "以下是可用的命令：",
         };
 
         var mgr = SysCordSettings.Manager;
@@ -58,7 +58,7 @@ public class HelpModule(CommandService Service) : ModuleBase<SocketCommandContex
             });
         }
 
-        await ReplyAsync("Help has arrived!", false, builder.Build()).ConfigureAwait(false);
+        await ReplyAsync("帮助已生成！", false, builder.Build()).ConfigureAwait(false);
     }
 
     [Command("help")]
@@ -69,14 +69,14 @@ public class HelpModule(CommandService Service) : ModuleBase<SocketCommandContex
 
         if (!result.IsSuccess)
         {
-            await ReplyAsync($"Sorry, I couldn't find a command like **{command}**.").ConfigureAwait(false);
+            await ReplyAsync($"抱歉，我找不到类似 **{command}** 的命令。").ConfigureAwait(false);
             return;
         }
 
         var builder = new EmbedBuilder
         {
             Color = new Color(114, 137, 218),
-            Description = $"Here are some commands like **{command}**:",
+            Description = $"以下是类似 **{command}** 的命令：",
         };
 
         foreach (var match in result.Commands)
@@ -91,18 +91,18 @@ public class HelpModule(CommandService Service) : ModuleBase<SocketCommandContex
             });
         }
 
-        await ReplyAsync("Help has arrived!", false, builder.Build()).ConfigureAwait(false);
+        await ReplyAsync("帮助已生成！", false, builder.Build()).ConfigureAwait(false);
     }
 
     private static string GetCommandSummary(CommandInfo cmd)
     {
-        return $"Summary: {cmd.Summary}\nParameters: {GetParameterSummary(cmd.Parameters)}";
+        return $"摘要: {cmd.Summary}\n参数: {GetParameterSummary(cmd.Parameters)}";
     }
 
     private static string GetParameterSummary(IReadOnlyList<ParameterInfo> p)
     {
         if (p.Count == 0)
-            return "None";
+            return "无";
         return $"{p.Count}\n- " + string.Join("\n- ", p.Select(GetParameterSummary));
     }
 

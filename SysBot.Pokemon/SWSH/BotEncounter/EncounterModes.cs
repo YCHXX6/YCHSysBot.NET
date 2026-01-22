@@ -1,39 +1,27 @@
 namespace SysBot.Pokemon;
 
+using System.ComponentModel;
+
 public enum EncounterMode
 {
-    /// <summary>
-    /// Bot will move back and forth in a straight vertical path to encounter Pokémon
-    /// </summary>
+    [Description("垂直线路 - 在垂直直线路往返移动以遭遇宝可梦")]
     VerticalLine,
 
-    /// <summary>
-    /// Bot will move back and forth in a straight horizontal path to encounter Pokémon
-    /// </summary>
+    [Description("水平线路 - 在水平直线路往返移动以遭遇宝可梦")]
     HorizontalLine,
 
-    /// <summary>
-    /// Bot will soft-reset Eternatus
-    /// </summary>
+    [Description("软重置 Eternatus")]
     Eternatus,
 
-    /// <summary>
-    /// Bot claims a gift and checks Box 1 Slot 1
-    /// </summary>
+    [Description("领取礼物并检查盒子 1 插槽 1")]
     Gift,
 
-    /// <summary>
-    /// Bot checks a wild encounter and then resets the game
-    /// </summary>
+    [Description("检查野外遭遇然后重置游戏")]
     Reset,
 
-    /// <summary>
-    /// Bot resets Regigigas
-    /// </summary>
+    [Description("重置 Regigigas")]
     Regigigas,
 
-    /// <summary>
-    /// Bot resets Motostoke Gym encounters
-    /// </summary>
+    [Description("重置 Motostoke 竞技场的遭遇")]
     MotostokeGym,
 }

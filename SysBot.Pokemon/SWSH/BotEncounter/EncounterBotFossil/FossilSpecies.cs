@@ -1,24 +1,18 @@
-﻿namespace SysBot.Pokemon;
+namespace SysBot.Pokemon;
+
+using System.ComponentModel;
 
 public enum FossilSpecies
 {
-    /// <summary>
-    /// Bot will revive Dracozolt
-    /// </summary>
+    [Description("德拉科梭托 (Dracozolt)")]
     Dracozolt,
 
-    /// <summary>
-    /// Bot will revive Arctozolt
-    /// </summary>
+    [Description("北极梭托 (Arctozolt)")]
     Arctozolt,
 
-    /// <summary>
-    /// Bot will revive Dracovish
-    /// </summary>
+    [Description("德拉科维什 (Dracovish)")]
     Dracovish,
 
-    /// <summary>
-    /// Bot will revive Arctovish
-    /// </summary>
+    [Description("北极维什 (Arctovish)")]
     Arctovish,
 }

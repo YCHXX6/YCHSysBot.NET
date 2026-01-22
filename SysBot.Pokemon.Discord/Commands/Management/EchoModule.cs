@@ -1,4 +1,4 @@
-﻿using Discord;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using SysBot.Base;
@@ -28,7 +28,7 @@ public class EchoModule : ModuleBase<SocketCommandContext>
                 AddEchoChannel(c, ch.ID);
         }
 
-        EchoUtil.Echo("Added echo notification to Discord channel(s) on Bot startup.");
+        EchoUtil.Echo("已在机器人启动时向 Discord 频道添加回显通知。");
     }
 
     [Command("echoHere")]
@@ -40,7 +40,7 @@ public class EchoModule : ModuleBase<SocketCommandContext>
         var cid = c.Id;
         if (Channels.TryGetValue(cid, out _))
         {
-            await ReplyAsync("Already notifying here.").ConfigureAwait(false);
+            await ReplyAsync("此频道已在接收回显通知。").ConfigureAwait(false);
             return;
         }
 
@@ -48,7 +48,7 @@ public class EchoModule : ModuleBase<SocketCommandContext>
 
         // Add to discord global loggers (saves on program close)
         SysCordSettings.Settings.EchoChannels.AddIfNew([GetReference(Context.Channel)]);
-        await ReplyAsync("Added Echo output to this channel!").ConfigureAwait(false);
+        await ReplyAsync("已在本频道添加回显输出！").ConfigureAwait(false);
     }
 
     private static void AddEchoChannel(ISocketMessageChannel c, ulong cid)
@@ -84,13 +84,13 @@ public class EchoModule : ModuleBase<SocketCommandContext>
         var id = Context.Channel.Id;
         if (!Channels.TryGetValue(id, out var echo))
         {
-            await ReplyAsync("Not echoing in this channel.").ConfigureAwait(false);
+            await ReplyAsync("该频道未开启回显。").ConfigureAwait(false);
             return;
         }
         EchoUtil.Forwarders.Remove(echo.Action);
         Channels.Remove(Context.Channel.Id);
         SysCordSettings.Settings.EchoChannels.RemoveAll(z => z.ID == id);
-        await ReplyAsync($"Echoes cleared from channel: {Context.Channel.Name}").ConfigureAwait(false);
+        await ReplyAsync($"已从频道清除回显：{Context.Channel.Name}").ConfigureAwait(false);
     }
 
     [Command("echoClearAll")]
@@ -102,12 +102,13 @@ public class EchoModule : ModuleBase<SocketCommandContext>
         {
             var entry = l.Value;
             await ReplyAsync($"Echoing cleared from {entry.ChannelName} ({entry.ChannelID}!").ConfigureAwait(false);
+            await ReplyAsync($"Echoing cleared from {entry.ChannelName} ({entry.ChannelID})!").ConfigureAwait(false);
             EchoUtil.Forwarders.Remove(entry.Action);
         }
         EchoUtil.Forwarders.RemoveAll(y => Channels.Select(x => x.Value.Action).Contains(y));
         Channels.Clear();
         SysCordSettings.Settings.EchoChannels.Clear();
-        await ReplyAsync("Echoes cleared from all channels!").ConfigureAwait(false);
+        await ReplyAsync("已从所有频道清除回显！").ConfigureAwait(false);
     }
 
     private RemoteControlAccess GetReference(IChannel channel) => new()

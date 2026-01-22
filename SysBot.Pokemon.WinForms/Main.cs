@@ -89,16 +89,40 @@ public sealed partial class Main : Form
     private void LoadControls()
     {
         PG_Hub.SelectedObject = RunningEnvironment.Config;
-
         var routines = Enum.GetValues<PokeRoutineType>().Where(z => RunningEnvironment.SupportsRoutine(z));
-        var list = routines.Select(z => new ComboItem(z.ToString(), (int)z)).ToArray();
+        static string GetRoutineDisplayName(PokeRoutineType z) => z switch
+        {
+            PokeRoutineType.Idle => "空闲",
+            PokeRoutineType.SurpriseTrade => "惊喜交易",
+            PokeRoutineType.FlexTrade => "灵活交易",
+            PokeRoutineType.LinkTrade => "连线交易",
+            PokeRoutineType.SeedCheck => "种子检查",
+            PokeRoutineType.Clone => "克隆",
+            PokeRoutineType.Dump => "导出",
+            PokeRoutineType.RaidBot => "突袭机器人",
+            PokeRoutineType.EncounterLine => "遭遇线路",
+            PokeRoutineType.Reset => "重置遭遇",
+            PokeRoutineType.DogBot => "箱体传说遭遇",
+            PokeRoutineType.EggFetch => "拾蛋",
+            PokeRoutineType.FossilBot => "化石机器人",
+            PokeRoutineType.RemoteControl => "远程控制",
+            _ => z.ToString(),
+        };
+
+        var list = routines.Select(z => new ComboItem(GetRoutineDisplayName(z), (int)z)).ToArray();
         CB_Routine.DisplayMember = nameof(ComboItem.Text);
         CB_Routine.ValueMember = nameof(ComboItem.Value);
         CB_Routine.DataSource = list;
         CB_Routine.SelectedValue = (int)PokeRoutineType.FlexTrade; // default option
 
         var protocols = Enum.GetValues<SwitchProtocol>();
-        var listP = protocols.Select(z => new ComboItem(z.ToString(), (int)z)).ToArray();
+        static string GetProtocolDisplayName(SwitchProtocol p) => p switch
+        {
+            SwitchProtocol.WiFi => "WiFi (无线)",
+            SwitchProtocol.USB => "USB (有线)",
+            _ => p.ToString(),
+        };
+        var listP = protocols.Select(z => new ComboItem(GetProtocolDisplayName(z), (int)z)).ToArray();
         CB_Protocol.DisplayMember = nameof(ComboItem.Text);
         CB_Protocol.ValueMember = nameof(ComboItem.Value);
         CB_Protocol.DataSource = listP;
@@ -145,13 +169,13 @@ public sealed partial class Main : Form
     {
         SaveCurrentConfig();
 
-        LogUtil.LogInfo("Starting all bots...", "Form");
+        LogUtil.LogInfo("正在启动所有机器人...", "Form");
         RunningEnvironment.InitializeStart();
         SendAll(BotControlCommand.Start);
         Tab_Logs.Select();
 
         if (Bots.Count == 0)
-            WinFormsUtil.Alert("No bots configured, but all supporting services have been started.");
+            WinFormsUtil.Alert("未配置任何机器人，但所有支持服务已启动。");
     }
 
     private void SendAll(BotControlCommand cmd)
@@ -159,7 +183,7 @@ public sealed partial class Main : Form
         foreach (var c in FLP_Bots.Controls.OfType<BotController>())
             c.SendCommand(cmd, false);
 
-        EchoUtil.Echo($"All bots have been issued a command to {cmd}.");
+        EchoUtil.Echo($"已向所有机器人发送 {cmd} 命令。");
     }
 
     private void B_Stop_Click(object sender, EventArgs e)
@@ -167,7 +191,7 @@ public sealed partial class Main : Form
         var env = RunningEnvironment;
         if (!env.IsRunning && (ModifierKeys & Keys.Alt) == 0)
         {
-            WinFormsUtil.Alert("Nothing is currently running.");
+            WinFormsUtil.Alert("当前没有运行的任务。");
             return;
         }
 
@@ -175,14 +199,14 @@ public sealed partial class Main : Form
 
         if ((ModifierKeys & Keys.Control) != 0 || (ModifierKeys & Keys.Shift) != 0) // either, because remembering which can be hard
         {
-            if (env.IsRunning)
+                if (env.IsRunning)
             {
-                WinFormsUtil.Alert("Commanding all bots to Idle.", "Press Stop (without a modifier key) to hard-stop and unlock control, or press Stop with the modifier key again to resume.");
+                WinFormsUtil.Alert("正在将所有机器人置为空闲。", "按 Stop（不按修饰键）可强制停止并解锁控制；再次按带修饰键的 Stop 可恢复。");
                 cmd = BotControlCommand.Idle;
             }
             else
             {
-                WinFormsUtil.Alert("Commanding all bots to resume their original task.", "Press Stop (without a modifier key) to hard-stop and unlock control.");
+                WinFormsUtil.Alert("正在命令所有机器人恢复其原始任务。", "按 Stop（不按修饰键）可强制停止并解锁控制。");
                 cmd = BotControlCommand.Resume;
             }
         }
@@ -194,7 +218,7 @@ public sealed partial class Main : Form
         var cfg = CreateNewBotConfig();
         if (!AddBot(cfg))
         {
-            WinFormsUtil.Alert("Unable to add bot; ensure details are valid and not duplicate with an already existing bot.");
+            WinFormsUtil.Alert("无法添加机器人；请确保信息有效且不与已存在的机器人重复。");
             return;
         }
         System.Media.SystemSounds.Asterisk.Play();

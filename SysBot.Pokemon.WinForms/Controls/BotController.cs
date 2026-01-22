@@ -21,13 +21,23 @@ public partial class BotController : UserControl
         for (int i = 1; i < opt.Length; i++)
         {
             var cmd = opt[i];
-            var item = new ToolStripMenuItem(cmd.ToString());
+            var item = new ToolStripMenuItem(cmd.ToString()) { Tag = cmd };
             item.Click += (_, __) => SendCommand(cmd);
+
+            // translate common command names for UI
+            switch (cmd)
+            {
+                case BotControlCommand.Start: item.Text = "启动"; break;
+                case BotControlCommand.Stop: item.Text = "停止"; break;
+                case BotControlCommand.Idle: item.Text = "空闲"; break;
+                case BotControlCommand.Resume: item.Text = "恢复"; break;
+                case BotControlCommand.Restart: item.Text = "重启"; break;
+            }
 
             RCMenu.Items.Add(item);
         }
 
-        var remove = new ToolStripMenuItem("Remove");
+        var remove = new ToolStripMenuItem("移除");
         remove.Click += (_, __) => TryRemove();
         RCMenu.Items.Add(remove);
         RCMenu.Opening += RcMenuOnOpening;
@@ -160,7 +170,7 @@ public partial class BotController : UserControl
             case BotControlCommand.Resume: bot.Resume(); break;
             case BotControlCommand.Restart:
             {
-                var prompt = WinFormsUtil.Prompt(MessageBoxButtons.YesNo, "Are you sure you want to restart the connection?");
+                var prompt = WinFormsUtil.Prompt(MessageBoxButtons.YesNo, "确定要重启连接吗？");
                 if (prompt != DialogResult.Yes)
                     return;
 
@@ -169,7 +179,7 @@ public partial class BotController : UserControl
                 break;
             }
             default:
-                WinFormsUtil.Alert($"{cmd} is not a command that can be sent to the Bot.");
+                WinFormsUtil.Alert($"{cmd} 不是可以发送到机器人的有效命令。");
                 return;
         }
         if (echo)

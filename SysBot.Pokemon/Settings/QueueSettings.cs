@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 
@@ -6,41 +6,41 @@ namespace SysBot.Pokemon;
 
 public class QueueSettings
 {
-    private const string FeatureToggle = nameof(FeatureToggle);
-    private const string UserBias = nameof(UserBias);
-    private const string TimeBias = nameof(TimeBias);
-    private const string QueueToggle = nameof(QueueToggle);
-    public override string ToString() => "Queue Joining Settings";
+    private const string FeatureToggle = "功能切换";
+    private const string UserBias = "用户偏好";
+    private const string TimeBias = "时间偏好";
+    private const string QueueToggle = "队列切换";
+    public override string ToString() => "队列加入 设置";
 
     // General
 
-    [Category(FeatureToggle), Description("Toggles if users can join the queue.")]
+    [Category(FeatureToggle), DisplayName("允许加入队列"), Description("是否允许用户加入队列。")]
     public bool CanQueue { get; set; } = true;
 
-    [Category(FeatureToggle), Description("Prevents adding users if there are this many users in the queue already.")]
+    [Category(FeatureToggle), DisplayName("最大队列人数"), Description("如果队列中已有该数量的用户，则阻止添加更多用户。")]
     public int MaxQueueCount { get; set; } = 999;
 
-    [Category(FeatureToggle), Description("Allows users to dequeue while being traded.")]
+    [Category(FeatureToggle), DisplayName("允许处理中出队"), Description("允许正在交易的用户出队。")]
     public bool CanDequeueIfProcessing { get; set; }
 
-    [Category(FeatureToggle), Description("Determines how Flex Mode will process the queues.")]
+    [Category(FeatureToggle), DisplayName("Flex 模式处理方式"), Description("决定 Flex 模式如何处理队列。")]
     public FlexYieldMode FlexMode { get; set; } = FlexYieldMode.Weighted;
 
-    [Category(FeatureToggle), Description("Determines when the queue is turned on and off.")]
+    [Category(FeatureToggle), DisplayName("队列开关模式"), Description("决定何时打开或关闭队列。")]
     public QueueOpening QueueToggleMode { get; set; } = QueueOpening.Threshold;
 
     // Queue Toggle
 
-    [Category(QueueToggle), Description("Threshold Mode: Count of users that will cause the queue to open.")]
+    [Category(QueueToggle), DisplayName("阈值解锁人数"), Description("阈值模式：触发队列开启的用户数量。")]
     public int ThresholdUnlock { get; set; }
 
-    [Category(QueueToggle), Description("Threshold Mode: Count of users that will cause the queue to close.")]
+    [Category(QueueToggle), DisplayName("阈值锁定人数"), Description("阈值模式：触发队列关闭的用户数量。")]
     public int ThresholdLock { get; set; } = 30;
 
-    [Category(QueueToggle), Description("Scheduled Mode: Seconds of being open before the queue locks.")]
+    [Category(QueueToggle), DisplayName("计划模式：开启持续秒数"), Description("计划模式：队列在被锁定前开放的秒数。")]
     public int IntervalOpenFor { get; set; } = 5 * 60;
 
-    [Category(QueueToggle), Description("Scheduled Mode: Seconds of being closed before the queue unlocks.")]
+    [Category(QueueToggle), DisplayName("计划模式：关闭持续秒数"), Description("计划模式：队列在解锁前关闭的秒数。")]
     public int IntervalCloseFor { get; set; } = 15 * 60;
 
     // Flex Users

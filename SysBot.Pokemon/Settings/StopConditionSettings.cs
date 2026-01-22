@@ -8,16 +8,16 @@ namespace SysBot.Pokemon;
 
 public class StopConditionSettings
 {
-    private const string StopConditions = nameof(StopConditions);
-    public override string ToString() => "Stop Condition Settings";
+    private const string StopConditions = "停止条件";
+    public override string ToString() => "停止条件 设置";
 
-    [Category(StopConditions), Description("Stops only on Pokémon of this species. No restrictions if set to \"None\".")]
+    [Category(StopConditions), DisplayName("停止物种"), Description("仅在指定物种时停止。若设为 \"None\" 则不限制。")]
     public Species StopOnSpecies { get; set; }
 
-    [Category(StopConditions), Description("Stops only on Pokémon with this FormID. No restrictions if left blank.")]
+    [Category(StopConditions), DisplayName("指定形态 ID"), Description("仅在具有此形态 ID 时停止。留空则不限制。")]
     public int? StopOnForm { get; set; }
 
-    [Category(StopConditions), Description("Stop only on Pokémon of the specified nature.")]
+    [Category(StopConditions), DisplayName("目标性格"), Description("仅在具有指定性格时停止。")]
     public Nature TargetNature { get; set; } = Nature.Random;
 
     [Category(StopConditions), Description("Minimum accepted IVs in the format HP/Atk/Def/SpA/SpD/Spe. Use \"x\" for unchecked IVs and \"/\" as a separator.")]
@@ -26,28 +26,28 @@ public class StopConditionSettings
     [Category(StopConditions), Description("Maximum accepted IVs in the format HP/Atk/Def/SpA/SpD/Spe. Use \"x\" for unchecked IVs and \"/\" as a separator.")]
     public string TargetMaxIVs { get; set; } = "";
 
-    [Category(StopConditions), Description("Selects the shiny type to stop on.")]
+    [Category(StopConditions), DisplayName("光闪目标"), Description("选择要停止的光闪类型。")]
     public TargetShinyType ShinyTarget { get; set; } = TargetShinyType.DisableOption;
 
-    [Category(StopConditions), Description("Allows filtering for min or max size to stop on.")]
+    [Category(StopConditions), DisplayName("身高目标"), Description("允许根据最小或最大身高进行筛选。")]
     public TargetHeightType HeightTarget { get; set; } = TargetHeightType.DisableOption;
 
-    [Category(StopConditions), Description("Stop only on Pokémon that have a mark.")]
+    [Category(StopConditions), DisplayName("仅有标记"), Description("仅在宝可梦具有标记时停止。")]
     public bool MarkOnly { get; set; }
 
-    [Category(StopConditions), Description("List of marks to ignore separated by commas. Use the full name, e.g. \"Uncommon Mark, Dawn Mark, Prideful Mark\".")]
+    [Category(StopConditions), DisplayName("忽略的标记列表"), Description("用逗号分隔要忽略的标记列表。使用完整名称，例如：\"Uncommon Mark, Dawn Mark, Prideful Mark\"。")]
     public string UnwantedMarks { get; set; } = "";
 
-    [Category(StopConditions), Description("Holds Capture button to record a 30 second clip when a matching Pokémon is found by EncounterBot or Fossilbot.")]
+    [Category(StopConditions), DisplayName("录制视频片段"), Description("当 EncounterBot 或 Fossilbot 找到匹配宝可梦时，按住 Capture 按钮以录制 30 秒片段。")]
     public bool CaptureVideoClip { get; set; }
 
-    [Category(StopConditions), Description("Extra time in milliseconds to wait after an encounter is matched before pressing Capture for EncounterBot or Fossilbot.")]
+    [Category(StopConditions), DisplayName("录制前额外等待 (毫秒)"), Description("在匹配到遭遇后，按下 Capture 之前额外等待的时间（毫秒）。用于 EncounterBot 或 Fossilbot。")]
     public int ExtraTimeWaitCaptureVideo { get; set; } = 10000;
 
-    [Category(StopConditions), Description("If set to TRUE, matches both ShinyTarget and TargetIVs settings. Otherwise, looks for either ShinyTarget or TargetIVs match.")]
+    [Category(StopConditions), DisplayName("同时匹配光闪与 IV"), Description("若为 TRUE，则同时匹配 ShinyTarget 与 TargetIVs 设置。否则，只需满足任一条件即可匹配。")]
     public bool MatchShinyAndIV { get; set; } = true;
 
-    [Category(StopConditions), Description("If not empty, the provided string will be prepended to the result found log message to Echo alerts for whomever you specify. For Discord, use <@userIDnumber> to mention.")]
+    [Category(StopConditions), DisplayName("匹配到时回显提及前缀"), Description("若不为空，指定的字符串会被加在匹配结果日志消息前以回显通知给指定对象。在 Discord 中使用 <@userIDnumber> 提及用户。")]
     public string MatchFoundEchoMention { get; set; } = string.Empty;
 
     public static bool EncounterFound<T>(T pk, int[] targetminIVs, int[] targetmaxIVs, StopConditionSettings settings, IReadOnlyList<string>? marklist) where T : PKM
